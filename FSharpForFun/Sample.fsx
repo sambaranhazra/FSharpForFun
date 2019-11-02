@@ -30,6 +30,8 @@ let convertNumberToRoman number =
     |> replace "IIII" "IV"
     |> replace "LXXXX" "XC"
 
+convertNumberToRoman 999
+
 type CarbonatedResult =
     | Uncarbonated of int
     | Carbonated of string
@@ -154,10 +156,62 @@ type FileErrorReason =
 
 let performActionOnFile action filePath =
     try
-        use sr = new System.IO.StreamReader(filePath: string)
+        use sr = new StreamReader(filePath: string)
         let result = action sr
         sr.Close()
         Success(result)
     with
-    | :? System.IO.FileNotFoundException as ex -> Failure(FileNotFound filePath)
-    | :? System.Security.SecurityException as ex -> Failure(UnauthorizedAccess(filePath, ex))
+    | :? FileNotFoundException as ex -> Failure(FileNotFound filePath)
+    | :? Security.SecurityException as ex -> Failure(UnauthorizedAccess(filePath, ex))
+
+let middleLayerDo action filePath =
+    let fileResult = performActionOnFile action filePath
+    fileResult
+
+let topLayerDo action filePath =
+    let fileResult = middleLayerDo action filePath
+    fileResult
+
+let printFirstLineOfFile filePath = 
+    let fileResult = topLayerDo (fun x-> x.ReadLine()) filePath
+
+    match fileResult with
+    | Success result -> printfn "First Line is %s" result
+    | Failure reason ->
+        match reason with
+        | FileNotFound file ->
+            printfn "File not found %s" file
+        | UnauthorizedAccess (file,_) ->
+            printfn "You don't have access to the file %s" file
+
+
+let factorial num =
+    let rec fact number result =
+        if number < 1 then result
+        else fact (number - 1) ((bigint number) * result)
+
+    (string (fact num (bigint 1)))
+ 
+type EMailAddress = EMailAddress of string
+
+let sendEmail (email:EMailAddress) = 
+    match email with
+    | EMailAddress mail ->
+        printfn "Sent an email to %s" mail
+
+[<Measure>]
+type Cm
+
+[<Measure>]
+type Inches
+
+[<Measure>]
+type Feet =
+    static member ToInches(feet: float<Feet>) : float<Inches> =
+        feet * 12.0<Inches/Feet>
+
+let meter = 100.0<Cm>
+
+let yard = 3.0<Feet>
+
+let yardInInches = Feet.ToInches(yard)

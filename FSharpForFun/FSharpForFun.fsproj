@@ -9,6 +9,8 @@
     <Compile Include="domain.fs" />
     <Compile Include="dataAccess.fs" />
     <Compile Include="Sample.fsx" />
+    <Compile Include="AsyncDemo.fsx" />
+    <Compile Include="Functional.fsx" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

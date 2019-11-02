@@ -400,3 +400,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/fsharp,csharp,windows,dotnetcore
+.idea/.idea**
