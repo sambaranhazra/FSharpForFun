@@ -1,7 +1,12 @@
 ﻿namespace MyApplication.BusinessLogic
 
+type Name = {
+    FirstName: string
+    MiddleName: string option
+    LastName: string
+}
 type Customer = {
-    Name: string
+    Name: Name
     Age: int}
 
 type Account = {

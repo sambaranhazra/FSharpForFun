@@ -35,4 +35,4 @@ let addPair line1 line2=
 orderLines |> List.reduce addPair
 
 
-[1.1;6.7] |> List.map (fun n -> n*n) |> List.reduce (fun z y -> z+y)
+[1.1;6.7] |> List.map (fun n -> n*n) |> List.reduce (+)
